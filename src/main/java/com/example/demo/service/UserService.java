@@ -17,6 +17,4 @@ public interface UserService {
     User findByEmail(String email);
 
     User findByEmployeeNo(Integer employeeNo);
-
-    List<Object[]> getDailyTimestamps(List<Long> userIds, LocalDate firstDay, LocalDate lastDay);
 }
