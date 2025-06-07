@@ -11,6 +11,9 @@
             <div>
                 <label> パスワード: <input type="password" name="password"/></label>
             </div>
+            <div th:if="${param.error}">
+	       		<p>社員番号とパスワードの組み合わせが正しくありません。</p>
+			</div>
             <div>
                 <input type="submit" value="ログイン"/>
             </div>
