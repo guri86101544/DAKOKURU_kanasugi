@@ -6,27 +6,25 @@
 </head>
 <body>
 	<h1>部署一覧</h1>
-	<p>キーワード</p>
-	<form　th:action="@{/}" action="GET">
-		<div>
-			<input placeholder="検索したい部署を入力">
-			<button><a>検索</a></button>
-			<button><a>クリア</a></button>
-		</div>
-	</form><br>
-	
-	検索結果　　件
+	<div>
+		<p>キーワード</p>
+		<form　th:action="@{/}" action="GET">
+			<div>
+				<input placeholder="検索したい部署を入力">
+				<button><a>検索</a></button>
+				<button><a>クリア</a></button>
+			</div>
+		</form><br>	
+		検索結果　　件
 		<div>	
 			<button type="button" onclick="location.href='/department/create'">部署新規追加</button>
 		</div>
-
-	
-	<p>Career Designチーム<button>編集</button></p>
-	<p>IT Solutionチーム<button>編集</button></p>
-	<p>営業<button>編集</button></p>
-	<p>リクルート<button>編集</button></p>
-	<p>制作開発<button>編集</button></p>
-	<p>制作開発<button>編集</button></p>
-	<p>管理<button>編集</button></p>
+		<div th:each="department : ${departments}">
+			<p th:text="${department.nameJp}">チーム</p>
+			<form th:action="@{/department/edit/{departmentId}(departmentId=${department.id})}" method="GET">
+				<button type="submit">編集</button>
+			</form>
+		</div>
+	</div>
 </body>
 </html>

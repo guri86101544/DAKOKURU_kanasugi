@@ -10,11 +10,15 @@ import lombok.Data;
 @Data
 public class DepartmentForm {
 	
+	private Long id;
+	
 	@NotBlank(message = "部署名を入力してください。" , groups = NotBlankGroup.class)
 	@Size(max = 255, min = 1, message = "部署名は1文字以上、255文字以内で入力してください。" , groups = SizeCheckGroup.class)
-	public String NameJp;
+	public String nameJp;
 	
 	@NotBlank(message = "部署名（英語）を入力してください。" , groups = NotBlankGroup.class)
 	@Size(max = 255, min = 1, message = "部署名（英語）は1文字以上、255文字以内で入力してください。" , groups = SizeCheckGroup.class)
-	public String NameEn;
+	public String nameEn;
+
+
 }

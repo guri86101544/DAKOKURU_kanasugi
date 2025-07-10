@@ -9,13 +9,13 @@
 	<p>作成する部署名</p>
 	<form th:action="@{/department/store}" th:object="${departmentForm}" method="POST">
 		<div>
-			<label for="NameJp">作成する部署名</label>
-			<input type="text" th:field="*{NameJp}" placeholder="新しい部署名">
-			<div th:if="${#fields.hasErrors('NameJp')}" th:text="${#fields.errors('*{NameJp}')[0]}" class="error-message"></div>
+			<label for="nameJp">作成する部署名</label>
+			<input type="text" th:field="*{nameJp}" placeholder="新しい部署名">
+			<div th:if="${#fields.hasErrors('nameJp')}" th:text="${#fields.errors('*{nameJp}')[0]}" class="error-message"></div>
 			<br>
-			<label for="NameEn">部署名(英語)</label>
-			<input type="text" th:field="*{NameEn}" placeholder="新しい部署名(英語)">
-			<div th:if="${#fields.hasErrors('NameEn')}" th:text="${#fields.errors('*{NameEn}')[0]}" class="error-message"></div>
+			<label for="nameEn">部署名(英語)</label>
+			<input type="text" th:field="*{nameEn}" placeholder="新しい部署名(英語)">
+			<div th:if="${#fields.hasErrors('nameEn')}" th:text="${#fields.errors('*{nameEn}')[0]}" class="error-message"></div>
 			<br>
 			<button type="submit">登録</button><br>
 			<a th:href="@{/department/index}">部署一覧に戻る</a><br>
