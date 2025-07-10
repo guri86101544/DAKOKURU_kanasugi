@@ -22,7 +22,7 @@
 			<input type="text" th:field="*{nameEn}">
 			<div th:if="${#fields.hasErrors('nameEn')}" th:text="${#fields.errors('*{nameEn}')[0]}" class="error-message"></div>
 			<br>
-			<button type="submit" value="変更" onclick="return confirm('更新します。よろしいですか？')">変更</button>
+			<button type="submit" value="変更" onclick="return confirm('更新します。宜しいですか？')">変更</button>
 		</div>
 	</form><br>			
 	<form th:action="@{/department/delete/{departmentId}(departmentId=${department.id})}" th:method="DELETE" onclick="return confirm('削除します。よろしいですか？')">	

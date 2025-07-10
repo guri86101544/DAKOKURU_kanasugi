@@ -32,4 +32,6 @@ public interface ValidationGroups {
     public interface SizeCheckGroup {
     }
     
+    public interface HalfWidthAlphaGroup {
+    }
 }
