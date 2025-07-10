@@ -17,7 +17,7 @@
 			<input type="text" th:field="*{nameEn}" placeholder="新しい部署名(英語)">
 			<div th:if="${#fields.hasErrors('nameEn')}" th:text="${#fields.errors('*{nameEn}')[0]}" class="error-message"></div>
 			<br>
-			<button type="submit">登録</button><br>
+			<button type="submit" onclick="return confirm('登録します。宜しいですか？')">登録</button><br>
 			<a th:href="@{/department/index}">部署一覧に戻る</a><br>
 		</div>
 	</form><br>
