@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.example.demo.entity.Department;
@@ -28,8 +29,22 @@ public class DepartmentController {
 
 	@GetMapping("/department/index")
 	public String index(Model model) {
-		List<Department> departments = departmentService.findAll();
+		List<Department> departments = departmentService.findAllByOrderByNameJpDesc();
 		model.addAttribute("departments", departments);
+		return "departments/index";
+	}
+	
+	@GetMapping("/department/search")
+	public String search(@RequestParam(required = false) String keyword, RedirectAttributes ra,Model model) {
+		List<Department> departments = departmentService.findAllByOrderByNameJpDesc();
+		if(keyword != null && !keyword.trim().isEmpty()) {
+			departments = departmentService.searchByKeyword(keyword);
+		} else {
+			departments = departmentService.findAllByOrderByNameJpDesc();
+		}
+		model.addAttribute("departments", departments);
+		model.addAttribute("keyword", keyword);
+		ra.addFlashAttribute("errorMessage", "データの取得に失敗しました。");
 		return "departments/index";
 	}
 	
@@ -42,7 +57,9 @@ public class DepartmentController {
 	@PostMapping("/department/store")
 	public String store(
 			@Validated(ValidationOrder.class) @ModelAttribute("departmentForm") DepartmentForm form, 
-			BindingResult result, Model model) {
+			BindingResult result,
+			RedirectAttributes ra,
+			Model model) {
 		
 		Department nameJp = departmentService.findByNameJp(form.getNameJp());
 			if(nameJp != null) {
@@ -68,8 +85,10 @@ public class DepartmentController {
 			department.setNameJp(form.getNameJp());
 			department.setNameEn(form.getNameEn());
 			departmentService.save(department);
+			ra.addFlashAttribute("successMessage", "登録しました。");
+			ra.addFlashAttribute("ErrorMessage", "登録に失敗しました。");
 
-		return "redirect:/department/create";
+		return "redirect:/department/index";
 	}
 	
 	@GetMapping("/department/edit/{departmentId}")
@@ -120,8 +139,12 @@ public class DepartmentController {
 		}
 	
 	@PostMapping("/department/delete/{departmentId}")
-	public String delete(@PathVariable("departmentId") Long id) {
+	public String delete(@PathVariable("departmentId") Long id,
+			RedirectAttributes ra) {
 		departmentService.deleteById(id);
+		
+		ra.addFlashAttribute("successMessage", "削除しました。");
+		ra.addFlashAttribute("ErrorMessage", "削除に失敗しました。");
 		return "redirect:/department/index";
 	}
 

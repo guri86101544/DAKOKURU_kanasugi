@@ -32,8 +32,8 @@ public class DepartmentServiceImpl implements DepartmentService {
 	}
 
 	@Override
-	public List<Department> findAll() {
-			List<Department> list = departmentRepository.findAll();
+	public List<Department> findAllByOrderByNameJpDesc() {
+			List<Department> list = departmentRepository.findAllByOrderByNameJpDesc();
 		return list;
 	}
 
@@ -47,5 +47,10 @@ public class DepartmentServiceImpl implements DepartmentService {
     public void deleteById(Long departmentId) {
         departmentRepository.deleteById(departmentId);
     }
+
+	@Override
+	public List<Department> searchByKeyword(String keyword) {
+		return departmentRepository.findByNameJpContainingIgnoreCaseOrderByNameJpDesc(keyword);
+	}
 
 }
