@@ -14,6 +14,4 @@ public interface DepartmentService {
 	Optional<Department> findById(Long id);
 	void deleteById(Long departmentId);
 	List<Department> searchByKeyword(String keyword);
-
-
 }

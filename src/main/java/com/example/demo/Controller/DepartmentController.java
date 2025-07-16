@@ -78,8 +78,6 @@ public class DepartmentController {
 			System.out.println("errors: " + result.getAllErrors());
 
 			if(result.hasErrors()) {
-//				ra.addFlashAttribute("org.springframework.validation.BindingResult.departmentForm", result);
-//				ra.addFlashAttribute("departmentForm", form);
 				model.addAttribute("org.springframework.validation.BindingResult.departmentForm", result);
 				model.addAttribute("departmentForm", form);
 				return "departments/create";

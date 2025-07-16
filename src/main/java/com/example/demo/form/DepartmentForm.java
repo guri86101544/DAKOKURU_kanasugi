@@ -22,6 +22,4 @@ public class DepartmentForm {
 	@Size(max = 255, min = 1, message = "部署名（英語）は1文字以上、255文字以内で入力してください。" , groups = SizeCheckGroup.class)
 	@HalfWidthAlpha(message = "半角英数字で入力してください。",groups = HalfWidthAlphaGroup.class)
 	public String nameEn;
-
-
 }
