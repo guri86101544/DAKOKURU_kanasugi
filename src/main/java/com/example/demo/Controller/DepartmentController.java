@@ -37,14 +37,18 @@ public class DepartmentController {
 	@GetMapping("/department/search")
 	public String search(@RequestParam(required = false) String keyword, RedirectAttributes ra,Model model) {
 		List<Department> departments = departmentService.findAllByOrderByNameJpDesc();
-		if(keyword != null && !keyword.trim().isEmpty()) {
-			departments = departmentService.searchByKeyword(keyword);
-		} else {
-			departments = departmentService.findAllByOrderByNameJpDesc();
-		}
-		model.addAttribute("departments", departments);
-		model.addAttribute("keyword", keyword);
-		ra.addFlashAttribute("errorMessage", "データの取得に失敗しました。");
+		try {
+			if(keyword != null && !keyword.trim().isEmpty()) {
+				departments = departmentService.searchByKeyword(keyword);
+			} else {
+				departments = departmentService.findAllByOrderByNameJpDesc();
+			}
+			model.addAttribute("departments", departments);
+			model.addAttribute("keyword", keyword);
+			} catch  (Exception e){
+				ra.addFlashAttribute("errorMessage", "データの取得に失敗しました。");
+				return "redirect:/department/index";
+			}
 		return "departments/index";
 	}
 	

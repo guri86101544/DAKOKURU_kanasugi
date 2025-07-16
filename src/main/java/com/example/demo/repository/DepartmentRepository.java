@@ -16,5 +16,6 @@ public interface DepartmentRepository extends JpaRepository<Department, Long> {
 	void deleteById(Long id);
 	List<Department> findByNameJpContainingIgnoreCaseOrderByNameJpDesc(String keyword);
 	List<Department> findAllByOrderByNameJpDesc();
+	List<Department> findByNameJpContainingIgnoreCaseOrNameEnContainingIgnoreCaseOrderByNameJpDesc(String keyword, String keyword2);
 
 }
