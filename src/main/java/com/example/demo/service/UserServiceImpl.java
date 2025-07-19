@@ -42,15 +42,4 @@ public class UserServiceImpl implements UserService {
     public User findByEmployeeNo(Integer employeeNo) {
         return userRepository.findByEmployeeNo(employeeNo);
     }
-
-    @Override
-    public List<Object[]> getDailyTimestamps(List<Long> userIds, LocalDate startDate, LocalDate endDate) {
-        if (userIds == null || userIds.isEmpty()) {
-            return Collections.emptyList();
-        }
-
-        List<Object[]> results = userRepository.findDailyTimestamps(userIds, startDate, endDate);
-
-        return results;
-    }
 }
