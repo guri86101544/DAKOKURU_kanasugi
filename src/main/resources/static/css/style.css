@@ -72,3 +72,10 @@ main {
 .error-message {
     color: red;
 }
+
+#clock {
+    font-size: 48px;
+    font-family: 'Segoe UI' , sans-serif;
+    text-align: center;
+    margin-top: 50px;
+}
