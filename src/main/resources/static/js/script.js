@@ -1,40 +1,40 @@
 // --- layouts/layout.htmlより ---
 // ヘッダーメニューの表示
 $(function(){
-                let $nav = $("#navigation"),
-                    $slideLine = $("#slide-line"),
-                    $currentItem = $(".current-item");
-    
-                // メニューにアクティブな項目がある場合
-                if ($currentItem.length) {
-                    $slideLine.css({
-                        "width": $currentItem.width() + 10 + "px",
-                        "left": $currentItem.position().left + 5 + "px"
-                    });
-                }
-    
-                // 下線のトランジション
-                $nav.find("li").hover(
-                    function(){
-                        $slideLine.css({
-                            "width": $(this).width() + 10 + "px",
-                            "left": $(this).position().left + 5 + "px"
-                        });
-                    },
-                    function(){
-                        if ($currentItem.length) {
-                            // 現在の項目に戻す
-                            $slideLine.css({
-                                "width": $currentItem.width() + 10 + "px",
-                                "left": $currentItem.position().left + 5 + "px"
-                            });
-                        } else {
-                            // 非表示にする
-                            $slideLine.width(0);
-                        }
-                    }
-                );
+    let $nav = $("#navigation"),
+        $slideLine = $("#slide-line"),
+        $currentItem = $(".current-item");
+
+    // メニューにアクティブな項目がある場合
+    if ($currentItem.length) {
+        $slideLine.css({
+            "width": $currentItem.width() + 10 + "px",
+            "left": $currentItem.position().left + 5 + "px"
+        });
+    }
+
+    // 下線のトランジション
+    $nav.find("li").hover(
+        function(){
+            $slideLine.css({
+                "width": $(this).width() + 10 + "px",
+                "left": $(this).position().left + 5 + "px"
             });
+        },
+        function(){
+            if ($currentItem.length) {
+                // 現在の項目に戻す
+                $slideLine.css({
+                    "width": $currentItem.width() + 10 + "px",
+                    "left": $currentItem.position().left + 5 + "px"
+                });
+            } else {
+                // 非表示にする
+                $slideLine.width(0);
+            }
+        }
+    );
+});
 
 
 // --- timestamps/create.htmlより ---
