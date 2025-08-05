@@ -8,7 +8,7 @@
 <body>
     <div class="box">
         <h1>部署編集・削除</h1>
-        <form th:action="@{/department/update/{departmentId}(departmentId=${departmentId})}"
+        <form id="updateForm" th:action="@{/department/update/{departmentId}(departmentId=${departmentId})}"
             th:object="${departmentForm}" method="POST">
             <div th:if="${successMessage}" th:text="${successMessage}" class="success-message"></div>
             <div class="form-row">
@@ -28,13 +28,19 @@
             </div>
             <div th:if="${#fields.hasErrors('nameEn')}" th:text="${#fields.errors('*{nameEn}')[0]}"
                 class="error-message"></div>
-            <button class="button delete-button" type="submit" value="変更"
-                onclick="return confirm('更新します。宜しいですか？')">変更</button>
+            <!-- <button class="button delete-button" type="submit" value="変更"
+                onclick="return confirm('更新します。宜しいですか？')">変更</button> -->
         </form>
-        <form th:action="@{/department/delete/{departmentId}(departmentId=${department.id})}" th:method="DELETE"
-            onclick="return confirm('削除します。よろしいですか？')">
-            <button class="button delete-button" type="submit" value="削除">削除</button>
-        </form>
+        <div class="button-group">
+
+            <button class="button delete-button" onclick="if (confirm('更新します。宜しいですか？')) document.getElementById('updateForm').submit();">変更</button>
+
+            <form th:action="@{/department/delete/{departmentId}(departmentId=${department.id})}" th:method="DELETE"
+                onclick="return confirm('削除します。よろしいですか？')">
+                <button class="button delete-button" type="submit" value="削除">削除</button>
+            </form>
+        </div>
+
         <a th:href="@{/department/index}">戻る</a>
     </div>
 </body>
