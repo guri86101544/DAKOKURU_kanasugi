@@ -67,7 +67,7 @@ public class UserController {
         if (hasTypeMismatch) {
             result.rejectValue("joiningDate", "invalid.joiningDate", "入社日は日付形式で正しく入力してください。");
         }
-        List<String> joiningDateErrors = result.getFieldErrors("joinningDate").stream()
+        List<String> joiningDateErrors = result.getFieldErrors("joiningDate").stream()
                 .filter(error -> !"typeMismatch".equals(error.getCode()))
                 .map(FieldError::getDefaultMessage)
                 .collect(Collectors.toList());
