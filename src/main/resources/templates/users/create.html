@@ -10,7 +10,7 @@
     
                     <label for="fn_jp">名前(正式表示)</label>
                     <input id="fn_jp" type="text" name="fnJp" th:value="*{fnJp}">
-                    <span th:if="${#fields.hasErrors('fnJp')}" th:errors="*{fnJp}" class="error-message""></span>
+                    <span th:if="${#fields.hasErrors('fnJp')}" th:errors="*{fnJp}" class="error-message"></span>
     
                     <label for=" fn_jp_hira">名前(ひらがな)</label>
                     <input id="fn_jp_hira" type="text" name="fnJpHira" th:value="*{fnJpHira}">
@@ -74,7 +74,7 @@
                     <span th:if="${#fields.hasErrors('mnEn')}" th:errors="*{mnEn}" class="error-message"></span>
     
                     <label for="email">メールアドレス</label>
-                    <input id="email" type="email" name="email" th:value="*{email}">
+                    <input id="email" type="text" name="email" th:value="*{email}">
                     <span th:if="${#fields.hasErrors('email')}" th:errors="*{email}" class="error-message"></span>
     
                     <label for="password">パスワード</label>
@@ -87,9 +87,9 @@
                         class="error-message"></span>
     
                     <label for="joining_date">入社日</label>
-                    <input id="joining_date" type="date" name="joiningDate" th:value="*{joiningDate}">
-                    <span th:if="${#fields.hasErrors('joiningDate')}" th:errors="*{joiningDate}" class="error-message"></span>
-    
+                    <input id="joining_date" type="text" name="joiningDate" th:value="*{joiningDate}">
+                    <span th:if="${#fields.hasErrors('joiningDate')}" th:text="${#fields.errors('joiningDate')[1]}" class="error-message"></span>
+                    
                     <div>
                         <label for="display_first_name">ファーストネームを先に表示</label>
                         <input id="display_first_name" type="checkbox" name="englishNotation"

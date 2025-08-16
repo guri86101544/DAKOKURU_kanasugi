@@ -1,11 +1,14 @@
 package com.example.demo.Controller;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -20,6 +23,7 @@ import com.example.demo.form.UserForm;
 import com.example.demo.service.NameService;
 import com.example.demo.service.UserService;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
 @Controller
@@ -39,29 +43,54 @@ public class UserController {
     }
 
     @PostMapping("/user/store")
-    public String store(@Validated @ModelAttribute("userForm") UserForm form,
+    public String store(@Valid @ModelAttribute("userForm") UserForm form,
             BindingResult result, RedirectAttributes ra) {
 
-        User existingEmail = userService.findByEmail(form.getEmail());
+        if(form.getEmployeeNo() == null || form.getEmployeeNo().trim().isEmpty()) {
+            result.rejectValue("employeeNo", "required.employeeNo", "");
+        } else {
+            Long EmployeeNo = Long.parseLong(form.getEmployeeNo()); //型変換            
+            User existingEmployeeNo = userService.findByEmployeeNo(EmployeeNo);
+            if (existingEmployeeNo != null) {
+                result.rejectValue("employeeNo", "duplicate.employeeNo", "社員番号が既に存在しています。");
+            }
+        }
+            
+            User existingEmail = userService.findByEmail(form.getEmail());
         if (existingEmail != null) {
             result.rejectValue("email", "duplicate.email", "メールアドレスは既に存在しています。");
         }
-
-        User existingEmployeeNo = userService.findByEmployeeNo(form.getEmployeeNo());
-        if (existingEmployeeNo != null) {
-            result.rejectValue("employeeNo", "duplicate.employeeNo", "社員番号が既に存在しています。");
+        
+        //入社日の英文エラーを置き換え
+        boolean hasTypeMismatch = result.getFieldErrors("joiningDate").stream()
+            .anyMatch(error -> "TypeMismatch".equalsIgnoreCase(error.getCode()));
+        if (hasTypeMismatch) {
+            result.rejectValue("joiningDate", "invalid.joiningDate", "入社日は日付形式で正しく入力してください。");
         }
+        List<String> joiningDateErrors = result.getFieldErrors("joinningDate").stream()
+                .filter(error -> !"typeMismatch".equals(error.getCode()))
+                .map(FieldError::getDefaultMessage)
+                .collect(Collectors.toList());
+        ra.addFlashAttribute("joiningDateMessages", joiningDateErrors);
+        
+        result.getFieldErrors("joiningDate").forEach(error -> {
+            System.out.println("code: " + error.getCode());
+            System.out.println("message: " + error.getDefaultMessage());
+        });
 
+        
         if (result.hasErrors()) {
             ra.addFlashAttribute("org.springframework.validation.BindingResult.userForm", result);
             ra.addFlashAttribute("userForm", form);
             return "redirect:/user/create";
         }
+        
+        Long EmployeeNo = Long.parseLong(form.getEmployeeNo());
 
         User user = new User();
         user.setEmail(form.getEmail());
         user.setPassword(passwordEncoder.encode(form.getPassword()));
-        user.setEmployeeNo(form.getEmployeeNo());
+        user.setEmployeeNo(EmployeeNo);
         user.setJoiningDate(form.getJoiningDate());
         userService.save(user);
 
@@ -120,9 +149,14 @@ public class UserController {
             result.rejectValue("email", "duplicate.email", "メールアドレスは既に存在しています。");
         }
 
-        User existingEmployeeNo = userService.findByEmployeeNo(form.getEmployeeNo());
-        if (existingEmployeeNo != null && !existingEmployeeNo.getId().equals(form.getId())) {
-            result.rejectValue("employeeNo", "duplicate.employeeNo", "社員番号が既に存在しています。");
+        if(form.getEmployeeNo() == null || form.getEmployeeNo().trim().isEmpty()) {
+            result.rejectValue("employeeNo", "required.employeeNo", "");
+        } else {
+            Long EmployeeNo = Long.parseLong(form.getEmployeeNo()); //型変換            
+            User existingEmployeeNo = userService.findByEmployeeNo(EmployeeNo);
+            if (existingEmployeeNo != null) {
+                result.rejectValue("employeeNo", "duplicate.employeeNo", "社員番号が既に存在しています。");
+            }
         }
 
         if (result.hasErrors()) {
@@ -136,11 +170,12 @@ public class UserController {
             return "redirect:" + redirectUrl;
         }
 
+        Long EmployeeNo = Long.parseLong(form.getEmployeeNo()); //型変換
         System.out.println(form.getId());
         User user = userService.findById(form.getId()).orElse(new User());
         user.setEmail(form.getEmail());
         user.setPassword(passwordEncoder.encode(form.getPassword()));
-        user.setEmployeeNo(form.getEmployeeNo());
+        user.setEmployeeNo(EmployeeNo);
         user.setJoiningDate(form.getJoiningDate());
         userService.save(user);
 
