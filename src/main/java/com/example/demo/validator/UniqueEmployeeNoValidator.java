@@ -17,8 +17,10 @@ public class UniqueEmployeeNoValidator implements ConstraintValidator<UniqueEmpl
 
     @Override
     public boolean isValid(String employeeNoStr, ConstraintValidatorContext context) {
-        if (employeeNoStr == null || employeeNoStr.trim().isEmpty())
+        if (employeeNoStr == null || employeeNoStr.trim().isEmpty()) {
             return true;
+        }
+        
         try {
             Long employeeNo = Long.parseLong(employeeNoStr);
             return userService.findByEmployeeNo(employeeNo) == null;
