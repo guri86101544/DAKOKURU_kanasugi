@@ -84,11 +84,11 @@ public class OldNameConsistencyValidator implements ConstraintValidator<ValidOld
             valid = false;
         }
         if (!isLengthValid(hira)) {
-            addViolation(context, "旧姓(全角ひらがな)は1文字以上、255文字以内で入力してください。", "olnHira");
+            addViolation(context, "旧姓(全角ひらがな)は1文字以上、255文字以内で入力してください。", "olnJpHira");
             valid = false;
         }
         if (!isLengthValid(kata)) {
-            addViolation(context, "旧姓(全角カタカナ)は1文字以上、255文字以内で入力してください。", "olnKata");
+            addViolation(context, "旧姓(全角カタカナ)は1文字以上、255文字以内で入力してください。", "olnJpKata");
             valid = false;
         }
         if (!isLengthValid(en)) {

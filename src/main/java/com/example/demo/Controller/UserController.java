@@ -34,6 +34,11 @@ public class UserController {
     private final UserService userService;
     private final NameService nameService;
 
+    @GetMapping("/user/index")
+    public String index(Model model) {
+        return "users/index";
+    }
+
     @GetMapping("/user/create")
     public String create(Model model) {
         if (!model.containsAttribute("userForm")) {
@@ -43,48 +48,40 @@ public class UserController {
     }
 
     @PostMapping("/user/store")
-    public String store(@Valid @ModelAttribute("userForm") UserForm form,
-            BindingResult result, RedirectAttributes ra) {
+    public String store(@Valid @ModelAttribute("userForm") UserForm form, BindingResult result, RedirectAttributes ra) {
 
-        if(form.getEmployeeNo() == null || form.getEmployeeNo().trim().isEmpty()) {
+        if (form.getEmployeeNo() == null || form.getEmployeeNo().trim().isEmpty()) {
             result.rejectValue("employeeNo", "required.employeeNo", "");
         } else {
-            Long EmployeeNo = Long.parseLong(form.getEmployeeNo()); //型変換            
+            Long EmployeeNo = Long.parseLong(form.getEmployeeNo()); // 型変換
             User existingEmployeeNo = userService.findByEmployeeNo(EmployeeNo);
             if (existingEmployeeNo != null) {
                 result.rejectValue("employeeNo", "duplicate.employeeNo", "社員番号が既に存在しています。");
             }
         }
-            
-            User existingEmail = userService.findByEmail(form.getEmail());
-        if (existingEmail != null) {
-            result.rejectValue("email", "duplicate.email", "メールアドレスは既に存在しています。");
-        }
-        
-        //入社日の英文エラーを置き換え
+
+        // 入社日の英文エラーを置き換え
         boolean hasTypeMismatch = result.getFieldErrors("joiningDate").stream()
-            .anyMatch(error -> "TypeMismatch".equalsIgnoreCase(error.getCode()));
+                .anyMatch(error -> "TypeMismatch".equalsIgnoreCase(error.getCode()));
         if (hasTypeMismatch) {
             result.rejectValue("joiningDate", "invalid.joiningDate", "入社日は日付形式で正しく入力してください。");
         }
         List<String> joiningDateErrors = result.getFieldErrors("joiningDate").stream()
-                .filter(error -> !"typeMismatch".equals(error.getCode()))
-                .map(FieldError::getDefaultMessage)
+                .filter(error -> !"typeMismatch".equals(error.getCode())).map(FieldError::getDefaultMessage)
                 .collect(Collectors.toList());
         ra.addFlashAttribute("joiningDateMessages", joiningDateErrors);
-        
+
         result.getFieldErrors("joiningDate").forEach(error -> {
             System.out.println("code: " + error.getCode());
             System.out.println("message: " + error.getDefaultMessage());
         });
 
-        
         if (result.hasErrors()) {
             ra.addFlashAttribute("org.springframework.validation.BindingResult.userForm", result);
             ra.addFlashAttribute("userForm", form);
             return "redirect:/user/create";
         }
-        
+
         Long EmployeeNo = Long.parseLong(form.getEmployeeNo());
 
         User user = new User();
@@ -141,18 +138,18 @@ public class UserController {
     }
 
     @PostMapping("/user/update")
-    public String update(@Validated @ModelAttribute("userForm") UserForm form,
-            BindingResult result, RedirectAttributes ra) {
+    public String update(@Validated @ModelAttribute("userForm") UserForm form, BindingResult result,
+            RedirectAttributes ra) {
 
         User existingEmail = userService.findByEmail(form.getEmail());
         if (existingEmail != null && !existingEmail.getId().equals(form.getId())) {
             result.rejectValue("email", "duplicate.email", "メールアドレスは既に存在しています。");
         }
 
-        if(form.getEmployeeNo() == null || form.getEmployeeNo().trim().isEmpty()) {
+        if (form.getEmployeeNo() == null || form.getEmployeeNo().trim().isEmpty()) {
             result.rejectValue("employeeNo", "required.employeeNo", "");
         } else {
-            Long EmployeeNo = Long.parseLong(form.getEmployeeNo()); //型変換            
+            Long EmployeeNo = Long.parseLong(form.getEmployeeNo()); // 型変換
             User existingEmployeeNo = userService.findByEmployeeNo(EmployeeNo);
             if (existingEmployeeNo != null) {
                 result.rejectValue("employeeNo", "duplicate.employeeNo", "社員番号が既に存在しています。");
@@ -163,14 +160,12 @@ public class UserController {
             ra.addFlashAttribute("org.springframework.validation.BindingResult.userForm", result);
             ra.addFlashAttribute("userForm", form);
 
-            String redirectUrl = UriComponentsBuilder
-                    .fromPath("/user/edit/{userId}")
-                    .buildAndExpand(form.getId())
+            String redirectUrl = UriComponentsBuilder.fromPath("/user/edit/{userId}").buildAndExpand(form.getId())
                     .toUriString();
             return "redirect:" + redirectUrl;
         }
 
-        Long EmployeeNo = Long.parseLong(form.getEmployeeNo()); //型変換
+        Long EmployeeNo = Long.parseLong(form.getEmployeeNo()); // 型変換
         System.out.println(form.getId());
         User user = userService.findById(form.getId()).orElse(new User());
         user.setEmail(form.getEmail());

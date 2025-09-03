@@ -1,15 +1,21 @@
 <!DOCTYPE html>
-<html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+    layout:decorate="~{layouts/layout}">
+
 <head>
-<meta charset="UTF-8">
-<title>ユーザー一覧</title>
+    <meta charset="UTF-8">
+    <title>ユーザー一覧</title>
 </head>
-<body>
-    <div>
-        <button >ユーザー新規登録</button>
-    </div>
-    <div>
-        ユーザー一覧
-    </div>
-</body>
+<main layout:fragment="content">
+
+    <body>
+        <div>
+            <button>ユーザー新規登録</button>
+        </div>
+        <div>
+            ユーザー一覧
+        </div>
+    </body>
+</main>
+
 </html>
